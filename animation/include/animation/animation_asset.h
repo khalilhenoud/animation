@@ -152,6 +152,23 @@ ANIMATION_API
 uint32_t
 animation_asset_is_asset_type(void);
 
+////////////////////////////////////////////////////////////////////////////////
+ANIMATION_API
+uint32_t
+get_channel_rotation_index(animation_node_t *channel, float time);
+
+ANIMATION_API
+uint32_t
+get_channel_translation_index(animation_node_t *channel, float time);
+
+ANIMATION_API
+uint32_t
+get_channel_scale_index(animation_node_t *channel, float time);
+
+ANIMATION_API
+animation_node_t *
+get_animation_channel(animation_asset_t *animation, cstring_t *name);
+
 #ifdef __cplusplus
 }
 #endif

@@ -256,6 +256,71 @@ animation_asset_is_asset_type(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+uint32_t
+get_channel_rotation_index(animation_node_t *channel, float time)
+{
+  assert(channel->rotation_keys.size);
+
+  {
+    cvector_t *keys = &channel->rotation_keys;
+    for (uint32_t i = 0; i < keys->size - 1; ++i) {
+      rotation_key_t *next_key = cvector_as(keys, i + 1, rotation_key_t);
+      if (time < next_key->time)
+        return i;
+    }
+  }
+
+  return UINT32_MAX;
+}
+
+uint32_t
+get_channel_translation_index(animation_node_t *channel, float time)
+{
+  assert(channel->position_keys.size);
+
+  {
+    cvector_t *keys = &channel->position_keys;
+    for (uint32_t i = 0; i < keys->size - 1; ++i) {
+      position_key_t *next_key = cvector_as(keys, i + 1, position_key_t);
+      if (time < next_key->time)
+        return i;
+    }
+  }
+
+  return UINT32_MAX;
+}
+
+uint32_t
+get_channel_scale_index(animation_node_t *channel, float time)
+{
+  assert(channel->scale_keys.size);
+
+  {
+    cvector_t *keys = &channel->scale_keys;
+    for (uint32_t i = 0; i < keys->size - 1; ++i) {
+      scale_key_t *next_key = cvector_as(keys, i + 1, scale_key_t);
+      if (time < next_key->time)
+        return i;
+    }
+  }
+
+  return UINT32_MAX;
+}
+
+animation_node_t *
+get_animation_channel(animation_asset_t *animation, cstring_t *name)
+{
+  animation_node_t *channel = NULL;
+  for (uint32_t i = 0; i < animation->channels.size; ++i) {
+    channel = cvector_as(&animation->channels, i, animation_node_t);
+    if (cstring_is_equal(&channel->name, name))
+      return channel;
+  }
+
+  return NULL;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 INITIALIZER(register_animation_asset_t)
 {
   vtable_t vtable;
